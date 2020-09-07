@@ -1,19 +1,46 @@
 import * as React from "react";
-import {Container} from "@material-ui/core";
+import {CircularProgress, Container, Grid, withStyles} from "@material-ui/core";
 import { AppToolbar } from "./header/app-toolbar";
-import {makeStyles} from "@material-ui/styles";
+import {inject} from "react-ioc";
+import { AppStore } from "app/stores/AppStore";
+import { observer } from "mobx-react";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
     container: {
         paddingLeft: "0px",
         paddingRight: "0px"
+    },
+    loading: {
+        height: "100vh"
     }
-}));
+});
 
-export const MainContainer = () => {
-    const classes = useStyles();
+@observer
+class MainContainerElement extends React.Component<any> {
+    @inject appStore: AppStore;
 
-    return <Container className={classes.container} maxWidth={false}>
-        <AppToolbar />
-    </Container>;
+    render() {
+        const { classes } = this.props;
+
+        return this.appStore.isLoading ?
+            <Grid container
+                  spacing={0}
+                  direction="column"
+                  alignItems="center"
+                  justify="center"
+                  className={classes.loading}>
+                <Grid item xs={3}>
+                    <CircularProgress disableShrink />
+                </Grid>
+            </Grid>:
+            <Container className={classes.container} maxWidth={false}>
+            <AppToolbar />
+        </Container>;
+    }
+
+    componentDidMount() {
+        this.appStore.init();
+    }
 }
+
+export const MainContainer = withStyles(useStyles)(MainContainerElement);

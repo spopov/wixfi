@@ -12,7 +12,10 @@ import {
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import SearchIcon from '@material-ui/icons/Search';
 import * as React from "react";
-import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { useInstance } from "react-ioc";
+import { AppStore } from "app/stores/AppStore";
+import { observer } from "mobx-react";
 
 const useStyles = (theme: Theme) => createStyles({
     grow: {
@@ -51,7 +54,7 @@ const useStyles = (theme: Theme) => createStyles({
     }
 });
 
-export const AppToolbar = withStyles(useStyles)((props: { classes: any }) => {
+export const AppToolbar = withStyles(useStyles)(observer((props: { classes: any }) => {
     const classes = props.classes;
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -61,6 +64,8 @@ export const AppToolbar = withStyles(useStyles)((props: { classes: any }) => {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    const app = useInstance(AppStore);
 
     const renderMenu = (
         <Menu
@@ -88,22 +93,14 @@ export const AppToolbar = withStyles(useStyles)((props: { classes: any }) => {
                     Wixfi
                 </Typography>
                 <div className={classes.grow} />
-                <ToggleButtonGroup size="medium" value={"left"} exclusive onChange={() => {}}>
-                    <ToggleButton value="left" className={classes.button} classes={{ selected: classes.btnSelected }}>
-                        Owner
-                    </ToggleButton>
-                    <ToggleButton value="center" className={classes.button} classes={{ selected: classes.btnSelected }}>
-                        Property Manager
-                    </ToggleButton>
-                    <ToggleButton value="right" className={classes.button} classes={{ selected: classes.btnSelected }}>
-                        Tenant
-                    </ToggleButton>
-                    <ToggleButton value="justify" className={classes.button} classes={{ selected: classes.btnSelected }}>
-                        Expert
-                    </ToggleButton>
-                    <ToggleButton value="justify2" className={classes.button} classes={{ selected: classes.btnSelected }}>
-                        Support
-                    </ToggleButton>
+                <ToggleButtonGroup size="medium" value={app.selectedHeaderItem} exclusive
+                                   onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectHeaderItem(value)}>
+                    {
+                        app.headerItems.map(x =>
+                            <ToggleButton key={x.name} value={x.name} className={classes.button} classes={{ selected: classes.btnSelected }}>
+                                {x.name}
+                            </ToggleButton>)
+                    }
                 </ToggleButtonGroup>
                 <div className={classes.grow} />
                 <IconButton aria-label="search" color="inherit">
@@ -128,4 +125,4 @@ export const AppToolbar = withStyles(useStyles)((props: { classes: any }) => {
         </AppBar>
         {renderMenu}
     </div>;
-})
+}))

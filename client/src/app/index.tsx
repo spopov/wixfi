@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Router, Route, Switch } from 'react-router';
-import { useInstance, provider} from "react-ioc";
+import {provider, inject} from "react-ioc";
 import { AppStore } from "app/stores/AppStore";
 import { MainContainer } from "app/components/main/container";
 import "./index.css";
+import {observer} from "mobx-react";
 
 const authRoutes = (history) => <Router history={history}>
     <Switch>
@@ -18,7 +19,13 @@ const appRoutes = (history) => <Router history={history}>
     </Switch>
 </Router>;
 
-export const App = provider(AppStore)(hot(({ history }) => {
-    const app = useInstance(AppStore);
-    return app.isAuthorized ? appRoutes(history) : authRoutes(history);
-}));
+@hot
+@provider(AppStore)
+@observer
+export class App extends React.Component<any> {
+    @inject appStore: AppStore;
+
+    render() {
+        return this.appStore.isAuthorized ? appRoutes(this.props.history) : authRoutes(this.props.history);
+    }
+}
