@@ -1,11 +1,20 @@
-import {AppBar, Toolbar, Badge, IconButton, Menu, MenuItem, Typography, Avatar} from "@material-ui/core";
+import {
+    AppBar,
+    Toolbar,
+    Badge,
+    IconButton,
+    Menu,
+    MenuItem,
+    Typography,
+    Avatar,
+    Theme, createStyles, withStyles
+} from "@material-ui/core";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import SearchIcon from '@material-ui/icons/Search';
 import * as React from "react";
-import {makeStyles} from "@material-ui/styles";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme: Theme) => createStyles({
     grow: {
         flexGrow: 1
     },
@@ -31,18 +40,19 @@ const useStyles = makeStyles((theme) => ({
         color: "white !important",
         border: "none",
         borderRadius: 0,
-        paddingLeft: "50px",
-        paddingRight: "50px",
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(4),
         fontWeight: 100,
-        height: "58px"
+        height: "58px",
+        fontSize: "9pt"
     },
     btnSelected: {
         backgroundColor: "#7d94da !important"
     }
-}));
+});
 
-export const AppToolbar = () => {
-    const classes = useStyles();
+export const AppToolbar = withStyles(useStyles)((props: { classes: any }) => {
+    const classes = props.classes;
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const menuId = 'primary-search-account-menu';
@@ -91,6 +101,9 @@ export const AppToolbar = () => {
                     <ToggleButton value="justify" className={classes.button} classes={{ selected: classes.btnSelected }}>
                         Expert
                     </ToggleButton>
+                    <ToggleButton value="justify2" className={classes.button} classes={{ selected: classes.btnSelected }}>
+                        Support
+                    </ToggleButton>
                 </ToggleButtonGroup>
                 <div className={classes.grow} />
                 <IconButton aria-label="search" color="inherit">
@@ -115,4 +128,4 @@ export const AppToolbar = () => {
         </AppBar>
         {renderMenu}
     </div>;
-}
+})
