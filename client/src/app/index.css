@@ -1,0 +1,7 @@
+body {
+    margin: 0px;
+}
+
+.MuiToolbar-regular {
+    min-height: 50px !important;
+}
