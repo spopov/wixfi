@@ -5,11 +5,23 @@ import { inject, provider } from "react-ioc";
 import { AppStore } from "app/stores/AppStore";
 import { observer } from "mobx-react";
 import { Loading } from "app/components/common/loading/loading";
+import {AppMenu} from "app/components/main/header/app-menu";
+import {styles} from "app/const/style";
 
 const useStyles = (theme) => ({
     container: {
         paddingLeft: "0px",
         paddingRight: "0px"
+    },
+    content: {
+        borderStyle: "solid",
+        borderRadius: "10px",
+        borderWidth: "8px",
+        borderColor: styles.colorSelected
+    },
+    contentOuter: {
+        paddingLeft: "30px",
+        paddingRight: "30px"
     }
 });
 
@@ -24,8 +36,14 @@ class MainContainerElement extends React.Component<any> {
         return this.appStore.isLoading ?
             <Loading /> :
             <Container className={classes.container} maxWidth={false}>
-            <AppToolbar />
-        </Container>;
+                <AppToolbar />
+                <AppMenu />
+                <Container className={classes.contentOuter} maxWidth={false}>
+                    <Container className={classes.content} maxWidth={false}>
+                        <h1>www</h1>
+                    </Container>
+                </Container>
+            </Container>;
     }
 
     componentDidMount() {

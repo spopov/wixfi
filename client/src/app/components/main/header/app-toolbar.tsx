@@ -17,13 +17,14 @@ import { useInstance } from "react-ioc";
 import { AppStore } from "app/stores/AppStore";
 import { observer } from "mobx-react";
 import {useHistory} from "react-router";
+import {styles} from "app/const/style";
 
 const useStyles = (theme: Theme) => createStyles({
     grow: {
         flexGrow: 1
     },
     appBar: {
-        backgroundColor: "#5d7ad1",
+        backgroundColor: styles.color,
         paddingLeft: "30px",
         paddingRight: "30px",
         borderBottomLeftRadius: "10px",
@@ -51,7 +52,7 @@ const useStyles = (theme: Theme) => createStyles({
         fontSize: "9pt"
     },
     btnSelected: {
-        backgroundColor: "#7d94da !important"
+        backgroundColor: styles.colorSelected + ' !important'
     }
 });
 
