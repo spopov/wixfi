@@ -1,24 +1,12 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root';
-import { Router, Route, Switch } from 'react-router';
 import {provider, inject} from "react-ioc";
-import { MainContainer } from "app/components/main/container";
 import "./index.css";
 import {observer} from "mobx-react";
 import {AuthStore} from "app/stores/AuthStore";
 import {Loading} from "app/components/common/loading/loading";
-
-const authRoutes = (history) => <Router history={history}>
-    <Switch>
-        <Route path="/" component={MainContainer}/>
-    </Switch>
-</Router>;
-
-const appRoutes = (history) => <Router history={history}>
-    <Switch>
-        <Route path="/" component={MainContainer}/>
-    </Switch>
-</Router>;
+import {AuthRoutes} from "app/components/routers/auth-router";
+import {AppRoutes} from "app/components/routers/app-router";
 
 @hot
 @provider(AuthStore)
@@ -31,7 +19,7 @@ export class App extends React.Component<any> {
             return <Loading />;
         }
 
-        return this.authStore.isAuthorized ? appRoutes(this.props.history) : authRoutes(this.props.history);
+        return this.authStore.isAuthorized ? AppRoutes(this.props.history) : AuthRoutes(this.props.history);
     }
 
     componentDidMount() {

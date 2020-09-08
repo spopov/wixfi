@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Container, withStyles} from "@material-ui/core";
 import { AppToolbar } from "./header/app-toolbar";
-import {inject, provider} from "react-ioc";
+import { inject, provider } from "react-ioc";
 import { AppStore } from "app/stores/AppStore";
 import { observer } from "mobx-react";
-import {Loading} from "app/components/common/loading/loading";
+import { Loading } from "app/components/common/loading/loading";
 
 const useStyles = (theme) => ({
     container: {
@@ -29,7 +29,10 @@ class MainContainerElement extends React.Component<any> {
     }
 
     componentDidMount() {
-        this.appStore.init();
+        const { history } = this.props;
+        const currentPath = history.location.pathname?.split("/")[1];
+
+        this.appStore.init(currentPath);
     }
 }
 

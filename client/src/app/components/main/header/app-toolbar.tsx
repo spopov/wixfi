@@ -16,6 +16,7 @@ import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { useInstance } from "react-ioc";
 import { AppStore } from "app/stores/AppStore";
 import { observer } from "mobx-react";
+import {useHistory} from "react-router";
 
 const useStyles = (theme: Theme) => createStyles({
     grow: {
@@ -86,6 +87,8 @@ export const AppToolbar = withStyles(useStyles)(observer((props: { classes: any 
         setAnchorEl(event.currentTarget);
     };
 
+    let history = useHistory();
+
     return <div className={classes.grow}>
         <AppBar position="static" className={classes.appBar}>
             <Toolbar className={classes.toolBar}>
@@ -94,8 +97,9 @@ export const AppToolbar = withStyles(useStyles)(observer((props: { classes: any 
                 </Typography>
                 <div className={classes.grow} />
                 <ToggleButtonGroup size="medium" value={app.selectedHeaderItem} exclusive
-                                   onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectHeaderItem(value)}>
+                                   onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectHeaderItem(value, history)}>
                     {
+
                         app.headerItems.map(x =>
                             <ToggleButton key={x.name} value={x.name} className={classes.button} classes={{ selected: classes.btnSelected }}>
                                 {x.name}

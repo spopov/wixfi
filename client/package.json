@@ -60,6 +60,7 @@
     "@material-ui/styles": "^4.10.0",
     "@material-ui/utils": "^4.10.2",
     "@material-ui/x-grid": "^0.1.67",
-    "@material-ui/lab": "^5.0.0-alpha.9"
+    "@material-ui/lab": "^5.0.0-alpha.9",
+    "react-router-dom": "^5.2.0"
   }
 }
