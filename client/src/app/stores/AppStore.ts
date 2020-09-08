@@ -3,9 +3,6 @@ import { Header } from "../models";
 
 export class AppStore {
     @observable
-    isAuthorized: boolean = true;
-
-    @observable
     headerItems: Header.IHeaderButton[] = [];
 
     @observable
@@ -33,6 +30,6 @@ export class AppStore {
 
         setTimeout(() => {
             runInAction(() => this.isLoading = false);
-        }, 2000);
+        }, 1000);
     }
 }
