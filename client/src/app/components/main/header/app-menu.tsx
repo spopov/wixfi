@@ -50,7 +50,7 @@ export const AppMenu = withStyles(useStyles)(observer((props: { classes: any }) 
     return <Grid container justify="center" className={props.classes.container}>
         <Tabs
             value={app.selectedMenuHeaderItem}
-            onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectMenuHeaderItem(value, history)}
+            onChange={(event: object, value: any) => app.selectMenuHeaderItem(value, history)}
             variant="fullWidth"
             classes={{ indicator: props.classes.tabIndicator }}
         >

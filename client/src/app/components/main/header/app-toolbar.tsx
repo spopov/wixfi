@@ -98,7 +98,7 @@ export const AppToolbar = withStyles(useStyles)(observer((props: { classes: any 
                 </Typography>
                 <div className={classes.grow} />
                 <ToggleButtonGroup size="medium" value={app.selectedHeaderItem} exclusive
-                                   onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectHeaderItem(value, history)}>
+                                   onChange={(event: object, value: any) => app.selectHeaderItem(value, history)}>
                     {
 
                         app.headerItems.map(x =>

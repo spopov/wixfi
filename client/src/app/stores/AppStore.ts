@@ -54,7 +54,7 @@ export class AppStore {
             runInAction(() => {
                 const owner = Header.owner;
                 this.headerItems.push(owner);
-                this.headerItemRelation.set(owner, [Header.dashboard, Header.billing]);
+                this.headerItemRelation.set(owner, [Header.dashboard, Header.properties, Header.billing]);
 
                 const propertyManager = Header.propertyManager;
                 this.headerItems.push(propertyManager);
