@@ -89,9 +89,9 @@ export class AppStore {
 
                             if (foundMenu) {
                                 defaultMenuItem = foundMenu.name;
+                            } else {
+                                defaultMenuItem = this.menuHeaderItems[0].name;
                             }
-
-                            defaultMenuItem = this.menuHeaderItems[0].name;
                         }
                     }
                 }

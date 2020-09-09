@@ -19,6 +19,7 @@ module.exports = {
   },
   output: {
     path: outPath,
+    publicPath: '/',
     filename: isProduction ? '[contenthash].js' : '[hash].js',
     chunkFilename: isProduction
       ? '[name].[contenthash].js'
@@ -129,7 +130,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: sourcePath,
-    hot: true,
+    hot: false,
     inline: true,
     historyApiFallback: {
       disableDotRule: true,
