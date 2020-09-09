@@ -51,16 +51,12 @@ export const AppMenu = withStyles(useStyles)(observer((props: { classes: any }) 
         <Tabs
             value={app.selectedMenuHeaderItem}
             onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectMenuHeaderItem(value, history)}
-            variant="scrollable"
-            scrollButtons="on"
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="scrollable force tabs example"
+            variant="fullWidth"
             classes={{ indicator: props.classes.tabIndicator }}
         >
             {
                 app.menuHeaderItems.map(x =>
-                    <Tab label={x.name} icon={iconMap.get(x.name).name} value={x.name} key={x.name} classes={tabClasses} />
+                    <Tab label={x.name} icon={iconMap.get(x.name)} value={x.name} key={x.name} classes={tabClasses} />
                 )
             }
         </Tabs>
