@@ -88,7 +88,7 @@ export const AppToolbar = withStyles(useStyles)(observer((props: { classes: any 
         setAnchorEl(event.currentTarget);
     };
 
-    let history = useHistory();
+    const history = useHistory();
 
     return <div className={classes.grow}>
         <AppBar position="static" className={classes.appBar}>

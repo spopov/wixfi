@@ -6,47 +6,101 @@ export class AppStore {
     headerItems: Header.IHeaderButton[] = [];
 
     @observable
+    menuHeaderItems: Header.IHeaderButton[] = [];
+
+    headerItemRelation: Map<Header.IHeaderButton, Header.IHeaderButton[]> = new Map<Header.IHeaderButton, Header.IHeaderButton[]>();
+
+    @observable
     isLoading: boolean = true;
 
     @observable
     selectedHeaderItem : string;
 
+    @observable
+    selectedMenuHeaderItem : string;
+
     @action
     selectHeaderItem(value: string, history: any) {
-        this.selectedHeaderItem = value;
-
         const found = this.headerItems.find(x => x.name == value);
         if(!found) {
             return;
         }
 
+        this.selectedHeaderItem = value;
+        this.menuHeaderItems = this.headerItemRelation.get(found);
+        this.selectedMenuHeaderItem = this.menuHeaderItems[0].name;
+
         history.push(found.path);
     }
 
     @action
-    init(currentPath: string) {
-        this.isLoading = true;
-
-        this.headerItems.push(Header.owner);
-        this.headerItems.push(Header.propertyManager);
-        this.headerItems.push(Header.tenant);
-        this.headerItems.push(Header.expert);
-        this.headerItems.push(Header.support);
-
-        let defaultItem = this.headerItems[0].name;
-
-        if(currentPath) {
-            const found = this.headerItems.find(x => x.path.toLowerCase() == '/' + currentPath);
-
-            if(found) {
-                defaultItem = found.name;
-            }
+    selectMenuHeaderItem(value: string, history: any) {
+        const found = this.headerItems.find(x => x.name == this.selectedHeaderItem);
+        const foundMenu = this.menuHeaderItems.find(x => x.name == value);
+        if(!found || !foundMenu) {
+            return;
         }
 
-        this.selectedHeaderItem = defaultItem;
+        this.selectedMenuHeaderItem = foundMenu.name;
+
+        history.push(found.path + foundMenu.path);
+    }
+
+    @action
+    init(currentPath: string, subPath: string) {
+        this.isLoading = true;
 
         setTimeout(() => {
-            runInAction(() => this.isLoading = false);
+            runInAction(() => {
+                const owner = Header.owner;
+                this.headerItems.push(owner);
+                this.headerItemRelation.set(owner, [Header.dashboard, Header.billing]);
+
+                const propertyManager = Header.propertyManager;
+                this.headerItems.push(propertyManager);
+                this.headerItemRelation.set(propertyManager, [Header.dashboard, Header.requests, Header.properties, Header.billing, Header.tenants]);
+
+                const tenant = Header.tenant;
+                this.headerItems.push(tenant);
+                this.headerItemRelation.set(tenant, [Header.dashboard, Header.requests, Header.billing]);
+
+                const expert = Header.expert;
+                this.headerItems.push(expert);
+                this.headerItemRelation.set(expert, [Header.requests]);
+
+                const support = Header.support;
+                this.headerItems.push(support);
+                this.headerItemRelation.set(support, [Header.requests]);
+
+                let defaultItem = this.headerItems[0].name;
+                this.menuHeaderItems = this.headerItemRelation.get(this.headerItems.find(x => x.name == defaultItem));
+                let defaultMenuItem = this.menuHeaderItems[0].name;
+
+                if(currentPath) {
+                    const found = this.headerItems.find(x => x.path.toLowerCase() == '/' + currentPath);
+
+                    if(found) {
+                        defaultItem = found.name;
+                        this.menuHeaderItems = this.headerItemRelation.get(found);
+
+                        if (subPath) {
+                            const foundMenu = this.menuHeaderItems
+                                .find(x => x.path.toLowerCase() == '/' + subPath);
+
+                            if (foundMenu) {
+                                defaultMenuItem = foundMenu.name;
+                            }
+
+                            defaultMenuItem = this.menuHeaderItems[0].name;
+                        }
+                    }
+                }
+
+                this.selectedHeaderItem = defaultItem;
+                this.selectedMenuHeaderItem = defaultMenuItem;
+
+                this.isLoading = false;
+            });
         }, 1000);
     }
 }

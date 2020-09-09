@@ -1,8 +1,12 @@
 import {Grid, createStyles, Theme, withStyles, Tabs, Tab} from "@material-ui/core";
 import {observer} from "mobx-react";
 import * as React from "react";
-import { Dashboard, List, Domain, People, Payment } from '@material-ui/icons';
+import {Dashboard, List, Domain, People, Payment} from '@material-ui/icons';
 import {styles} from "app/const/style";
+import {useInstance} from "react-ioc";
+import {AppStore} from "app/stores/AppStore";
+import * as Header from "../../../models/header-items";
+import {useHistory} from "react-router";
 
 const useStyles = (theme: Theme) => createStyles({
     container: {
@@ -24,6 +28,14 @@ const useStyles = (theme: Theme) => createStyles({
     }
 });
 
+const iconMap: Map<string, any> = new Map([
+    [Header.dashboard.name, <Dashboard fontSize="large" />],
+    [Header.requests.name, <List fontSize="large" />],
+    [Header.properties.name, <Domain fontSize="large" />],
+    [Header.billing.name, <Payment fontSize="large" />],
+    [Header.tenants.name, <People fontSize="large" />]
+]);
+
 export const AppMenu = withStyles(useStyles)(observer((props: { classes: any }) => {
     props.classes;
 
@@ -32,10 +44,13 @@ export const AppMenu = withStyles(useStyles)(observer((props: { classes: any }) 
         root: props.classes.tab
     }
 
+    const app = useInstance(AppStore);
+    const history = useHistory();
+
     return <Grid container justify="center" className={props.classes.container}>
         <Tabs
-            value="Billing"
-            onChange={() => {}}
+            value={app.selectedMenuHeaderItem}
+            onChange={(event: React.MouseEvent<HTMLElement>, value: string) => app.selectMenuHeaderItem(value, history)}
             variant="scrollable"
             scrollButtons="on"
             indicatorColor="primary"
@@ -43,11 +58,11 @@ export const AppMenu = withStyles(useStyles)(observer((props: { classes: any }) 
             aria-label="scrollable force tabs example"
             classes={{ indicator: props.classes.tabIndicator }}
         >
-            <Tab label="Dashboard" icon={<Dashboard fontSize="large" />} value="Dashboard" classes={tabClasses} />
-            <Tab label="Requests" icon={<List fontSize="large" />} value="Requests" classes={tabClasses} />
-            <Tab label="Listing" icon={<Domain fontSize="large" />} value="Listing" classes={tabClasses} />
-            <Tab label="Billing" icon={<Payment fontSize="large" />} value="Billing" classes={tabClasses} />
-            <Tab label="Tenants" icon={<People fontSize="large" />} value="Tenants" classes={tabClasses} />
+            {
+                app.menuHeaderItems.map(x =>
+                    <Tab label={x.name} icon={iconMap.get(x.name).name} value={x.name} key={x.name} classes={tabClasses} />
+                )
+            }
         </Tabs>
     </Grid>;
 }));

@@ -48,9 +48,9 @@ class MainContainerElement extends React.Component<any> {
 
     componentDidMount() {
         const { history } = this.props;
-        const currentPath = history.location.pathname?.split("/")[1];
+        const parts = history.location.pathname?.split("/");
 
-        this.appStore.init(currentPath);
+        this.appStore.init(parts[1], parts[2]);
     }
 }
 
