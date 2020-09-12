@@ -50,7 +50,7 @@ class MainContainerElement extends React.Component<any> {
         const { history } = this.props;
         const parts = history.location.pathname?.split("/");
 
-        this.appStore.init(parts[1], parts[2]);
+        this.appStore.init(parts[1], parts[2], history);
     }
 }
 

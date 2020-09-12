@@ -47,7 +47,7 @@ export class AppStore {
     }
 
     @action
-    init(currentPath: string, subPath: string) {
+    init(currentPath: string, subPath: string, history: any) {
         this.isLoading = true;
 
         setTimeout(() => {
@@ -72,15 +72,15 @@ export class AppStore {
                 this.headerItems.push(support);
                 this.headerItemRelation.set(support, [Header.requests]);
 
-                let defaultItem = this.headerItems[0].name;
-                this.menuHeaderItems = this.headerItemRelation.get(this.headerItems.find(x => x.name == defaultItem));
-                let defaultMenuItem = this.menuHeaderItems[0].name;
+                let defaultItem = this.headerItems[0];
+                this.menuHeaderItems = this.headerItemRelation.get(this.headerItems.find(x => x.name == defaultItem.name));
+                let defaultMenuItem = this.menuHeaderItems[0];
 
                 if(currentPath) {
                     const found = this.headerItems.find(x => x.path.toLowerCase() == '/' + currentPath);
 
                     if(found) {
-                        defaultItem = found.name;
+                        defaultItem = found;
                         this.menuHeaderItems = this.headerItemRelation.get(found);
 
                         if (subPath) {
@@ -88,18 +88,20 @@ export class AppStore {
                                 .find(x => x.path.toLowerCase() == '/' + subPath);
 
                             if (foundMenu) {
-                                defaultMenuItem = foundMenu.name;
+                                defaultMenuItem = foundMenu;
                             } else {
-                                defaultMenuItem = this.menuHeaderItems[0].name;
+                                defaultMenuItem = this.menuHeaderItems[0];
                             }
                         }
                     }
                 }
 
-                this.selectedHeaderItem = defaultItem;
-                this.selectedMenuHeaderItem = defaultMenuItem;
+                this.selectedHeaderItem = defaultItem.name;
+                this.selectedMenuHeaderItem = defaultMenuItem.name;
 
                 this.isLoading = false;
+
+                history.push(defaultItem.path + defaultMenuItem.path);
             });
         }, 1000);
     }
